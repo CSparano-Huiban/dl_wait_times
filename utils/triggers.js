@@ -35,61 +35,16 @@ Ifttt_triggers.prototype.post_short_wait_time = function(req, res) {
 				return;
 			}
 
-			ride_info_manager.getRidesForDisneyland(function(err, rides){
+			db.getRideTimeListById(data_base_id, function(err, old_events){
 				if(err){
 					res.status(400).send({ errors: [ err ] });
 					return
 				}
-
-				rides = rides.filter(function(ride){
-					return ride.id === ride_id
-				});
-
-				db.getRideTimeListById(data_base_id, function(err, old_events){
-					if(err){
-						res.status(400).send({ errors: [ err ] });
-						return
-					}
-
-					if(rides.length === 1 ){
-						db.getPreviousRideTimes(function(err, last_seen_wait_times){
-							if(err){
-								res.status(400).send({ errors: [ err ] });
-								return
-							}
-							var ride = rides[0];
-							var previous_wait_time = last_seen_wait_times[ride.id] || 100000;
-							var current_wait_time = ride.waitTime;
-							var date = new Date();
-							console.log("updating ride: ", ride);
-							if(current_wait_time < previous_wait_time){
-								
-								if(current_wait_time <= wait_time && wait_time < previous_wait_time){
-									var new_value = { 
-										wait_time: ride.waitTime,
-										name: ride.name,
-										meta:{
-											id: uid(16),
-											timestamp: Math.floor(date.getTime()/1000)
-										}
-									};
-									old_events.event_list.unshift(new_value)
-								}
-							}
-							var slice_value = old_events.event_list.length;
-							if(limit){
-								slice_value = Math.min(limit, slice_value);
-							}
-							res.status(200).send({ data: old_events.event_list.slice(0,slice_value)});
-						})	
-					}else{
-						var slice_value = old_events.event_list.length;
-						if(limit){
-							slice_value = Math.min(limit, slice_value);
-						}
-						res.status(200).send({ data: old_events.event_list.slice(0,slice_value)});
-					}
-				});
+				var slice_value = old_events.event_list.length;
+				if(limit){
+					slice_value = Math.min(limit, slice_value);
+				}
+				res.status(200).send({ data: old_events.event_list.slice(0,slice_value)});
 			});
 		}else{
 			res.status(400).send({ errors: [ { message: "400" } ] });

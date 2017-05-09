@@ -23,10 +23,12 @@ var pollWaitTimes = function(db){
 		    	db.getPreviousRideTimes(function(err, oldWaitTimes){
 		    		for(var i = 0; i < rides.length; i++){
 			    		var ride = rides[i];
-			    		updateDictionariesFromRide(oldWaitTimes, ride);
+			    		updateDictionariesFromRide(oldWaitTimes, ride, db);
 			    		oldWaitTimes[ride.id] = ride.waitTime;
 			    	}
 
+			    	console.log("Previous_wait_times:  ", oldWaitTimes);
+			    	
 			    	db.updatePreviousRideTimes(oldWaitTimes, function(err, result){
 			    		if(err){
 			    			console.log(err);
@@ -36,6 +38,7 @@ var pollWaitTimes = function(db){
 		    	});
 		    });
 		}else if(date.getHours() === 3 && date.getMinutes() < 10){
+			console.log("RESETING WAITIMES");
 			db.updatePreviousRideTimes({}, function(err, data){
 				if(err){
 		    		console.log(err)

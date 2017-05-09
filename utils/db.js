@@ -41,6 +41,7 @@ Db.prototype.getRideTimeListById = function(ride_time_id, callback){
 };
 
 Db.prototype.addEventToRideTimeListById = function(ride_time_id, new_event, callback){
+	console.log("adding new event!!!!! ", new_event);
 	var tempDb = this;
 	tempDb.getRideTimeListById(ride_time_id, function(err, oldList){
 		if(err){
@@ -164,6 +165,8 @@ Db.prototype.getPreviousRideTimes = function(callback){
 };
 
 Db.prototype.updatePreviousRideTimes = function(new_times, callback){
+
+	console.log("updating wait times!!!!! ", new_times);
 	var params = {
 		TableName: "park_id_to_previous_times",
 		Item: {
@@ -179,8 +182,10 @@ Db.prototype.updatePreviousRideTimes = function(new_times, callback){
             return;
         } else {
   			if (data){
+  				console.log("updating wait times!!!!! Succeeded");
 	        	callback(null, params.Item.times_map);
 	    	}else{
+	    		console.log("updating wait times!!!!! Failed");
 	    		callback("poorly formated request");
 	    	}
         }
