@@ -1,0 +1,5 @@
+.npm
+*.zip
+.ebextensions
+*.DS_Store
+node_modules

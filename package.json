@@ -1,0 +1,19 @@
+{
+  "name": "express_wait",
+  "version": "1.0.0",
+  "description": "wait times for express",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christopher Sparano-Huiban",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.49.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "nodemailer": "^4.0.1",
+    "themeparks": "^4.1.4",
+    "uid": "0.0.2"
+  }
+}
