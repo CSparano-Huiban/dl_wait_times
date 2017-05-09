@@ -73,7 +73,7 @@ Ifttt_triggers.prototype.post_short_wait_time = function(req, res) {
 											timestamp: Math.floor(date.getTime()/1000)
 										}
 									};
-									old_events.unshift(new_value)
+									old_events.event_list.unshift(new_value)
 								}
 							}
 							var slice_value = old_events.event_list.length;
