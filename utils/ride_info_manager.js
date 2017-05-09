@@ -4,6 +4,8 @@ var Themeparks = require("themeparks"),
 
 var ride_info_manager = module.exports = {};
 
+var wait_time_options = [5,10,15,20,25,30,45,60];
+
 var disneyMagicKingdom = new Themeparks.Parks.DisneylandResortMagicKingdom();
 
 var pollWaitTimes = function(db){
@@ -122,3 +124,4 @@ var getRideListForOptions = function(callback){
 ride_info_manager.pollWaitTimes = pollWaitTimes;
 ride_info_manager.getRidesForDisneyland = getRidesForDisneyland;
 ride_info_manager.getRideListForOptions = getRideListForOptions;
+ride_info_manager.wait_time_options = wait_time_options;

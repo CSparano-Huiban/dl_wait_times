@@ -4,7 +4,7 @@ var util = require("./util"),
 
 var triggers = module.exports = {};
 
-var wait_time_options = [5,10,15,20,25,30,45,60];
+var wait_time_options = ride_info_manager.wait_time_options;
 
 function Ifttt_triggers(DB){
 	this.db = DB;
