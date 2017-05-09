@@ -40,4 +40,4 @@ app.post('/ifttt/v1/triggers/short_wait_time/fields/wait_time/options', function
 
 app.listen(8081);
 
-// ride_info_manager.pollWaitTimes(db);
+ride_info_manager.pollWaitTimes(db);

@@ -1,5 +1,13 @@
 var AWS = require("aws-sdk");
 
+var updateConfigs = {};
+updateConfigs["region"] = process.env.REGION || "us-west-2";
+var environment = process.env.ENV || "development";
+if (environment == "development"){
+  updateConfigs["endpoint"] = "https://dynamodb.us-west-2.amazonaws.com";  
+}
+AWS.config.update(updateConfigs);
+
 var db = module.exports = {};
 
 function Db() {
@@ -20,7 +28,6 @@ Db.prototype.getRideTimeListById = function(ride_time_id, callback){
 	        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
 	        callback(err);
 	    } else {
-	    	console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 	    	if (data.Item){
 	        	callback(null, data.Item);
 	    	}else if(Object.keys(data).length === 0 && data.constructor === Object){
@@ -40,9 +47,7 @@ Db.prototype.addEventToRideTimeListById = function(ride_time_id, new_event, call
 			callback(err);
 			return
 		}
-		console.log("before: ", oldList.event_list);
 		oldList.event_list.unshift(new_event);
-		console.log("after: ",oldList.event_list);
 		var params = {
 			TableName: "ride_time_to_events",
 			Item: {
@@ -58,7 +63,6 @@ Db.prototype.addEventToRideTimeListById = function(ride_time_id, new_event, call
 	            return;
 	        } else {
 	  			if (data){
-		    		console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 		        	callback(null, params.Item);
 		    	}else{
 		    		callback("poorly formated request");
@@ -82,7 +86,6 @@ Db.prototype.getTriggerIdsToRideTimeListById = function(ride_time_id, callback){
 	        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
 	        callback(err);
 	    } else {
-	    	console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 	    	if (data.Item){
 	        	callback(null, data.Item);
 
@@ -120,7 +123,6 @@ Db.prototype.addTriggerIdToRideTimeListById = function(ride_time_id, triggerId, 
 	            return;
 	        } else {
 	  			if (data){
-		    		console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 		        	callback(null, params.Item);
 		    	}else{
 		    		callback("poorly formated request");
@@ -146,7 +148,6 @@ Db.prototype.getPreviousRideTimes = function(callback){
 	        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
 	        callback(err);
 	    } else {
-	    	console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 	    	if (data.Item){
 	        	callback(null, data.Item.times_map);
 
@@ -178,7 +179,6 @@ Db.prototype.updatePreviousRideTimes = function(new_times, callback){
             return;
         } else {
   			if (data){
-	    		console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
 	        	callback(null, params.Item.times_map);
 	    	}else{
 	    		callback("poorly formated request");

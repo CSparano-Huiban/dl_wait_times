@@ -9,28 +9,40 @@ var disneyMagicKingdom = new Themeparks.Parks.DisneylandResortMagicKingdom();
 var pollWaitTimes = function(db){
 
 	setInterval(function () {
-		console.log("started polling")
-	    getRidesForDisneyland(function(err, rides){
-	    	if(err){
-	    		console.log(err)
-	    		return
-	    	}
-	    	db.getPreviousRideTimes(function(err, oldWaitTimes){
-	    		for(var i = 0; i < rides.length; i++){
-		    		var ride = rides[i];
-		    		updateDictionariesFromRide(oldWaitTimes, ride);
-		    		oldWaitTimes[ride.id] = ride.waitTime;
-		    	}
+		var date = new Date();
 
-		    	db.updatePreviousRideTimes(oldWaitTimes, function(err, result){
-		    		if(err){
-		    			console.log(err);
-		    			return
-		    		}
-		    	})
-	    	});
-	    })
-	}, 60000);
+		if(date.getHours() >= 7){
+			console.log("polling at Date: ", date);
+			getRidesForDisneyland(function(err, rides){
+		    	if(err){
+		    		console.log(err)
+		    		return
+		    	}
+		    	db.getPreviousRideTimes(function(err, oldWaitTimes){
+		    		for(var i = 0; i < rides.length; i++){
+			    		var ride = rides[i];
+			    		updateDictionariesFromRide(oldWaitTimes, ride);
+			    		oldWaitTimes[ride.id] = ride.waitTime;
+			    	}
+
+			    	db.updatePreviousRideTimes(oldWaitTimes, function(err, result){
+			    		if(err){
+			    			console.log(err);
+			    			return
+			    		}
+			    	})
+		    	});
+		    });
+		}else if(date.getHours() === 3 && date.getMinutes() < 10){
+			db.updatePreviousRideTimes({}, function(err, data){
+				if(err){
+		    		console.log(err)
+		    		return
+		    	}
+			});
+		}
+	    
+	}, 300000);
 
 };
 
